@@ -7,6 +7,15 @@ apply plugin: "de.mannodermaus.android-junit5"
 android {
   compileSdkVersion 26
   buildToolsVersion "26.0.2"
+
+  signingConfigs {
+    release {
+      storeFile = file(project.STORE_FILE_BACKUP)
+      storePassword = project.STORE_PASSWORD_BACKUP
+      keyAlias = project.KEY_ALIAS_UPLOADER
+      keyPassword = project.KEY_PASSWORD_UPLOADER
+    }
+  }
   defaultConfig {
     applicationId "pt.caixamagica.aptoide.uploader"
     minSdkVersion 15
@@ -19,6 +28,7 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
     }
     debug{
       minifyEnabled false
@@ -45,6 +55,7 @@ dependencies {
   // Reactive Programming
   compile "io.reactivex.rxjava2:rxjava:2.1.6"
   compile "com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0"
+  compile "com.jakewharton.rxrelay2:rxrelay:2.0.0"
 
   // Kotlin
   compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
