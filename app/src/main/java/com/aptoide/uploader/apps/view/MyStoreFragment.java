@@ -105,11 +105,9 @@ public class MyStoreFragment extends FragmentView implements MyStoreView {
         AndroidSchedulers.mainThread(),
         new UploadPermissionProvider((PermissionProvider) getContext())).present();
     toolbar.setNavigationIcon(null);
-    toolbar.setNavigationOnClickListener(view1 -> {
-      resetTitle();
-      resetSelectionState();
-      adapter.handleBackNavigation();
-    });
+    toolbar.setNavigationOnClickListener(view1 ->{
+      handleToolbarItems(false);
+      adapter.handleBackNavigation();});
     storeBanner.setOnLongClickListener(view12 -> {
       PackageInfo pInfo = null;
       try {
@@ -155,14 +153,14 @@ public class MyStoreFragment extends FragmentView implements MyStoreView {
     super.onDestroyView();
   }
 
-  @Override public void resetSelectionState() {
-
-    if (adapter.getSelectedCount() != 0) {
-      toggleSubmitButton(false);
-      selectionObservable.dispose();
-      setUpSelectionListener();
-    }
-  }
+  //@Override public void resetSelectionState() {
+  //
+  //  if (adapter.getSelectedCount() != 0) {
+  //    toggleSubmitButton(false);
+  //    selectionObservable.dispose();
+  //    setUpSelectionListener();
+  //  }
+  //}
 
   private void setUpSelectionListener() {
     selectionObservable = adapter.toggleSelection()
@@ -312,6 +310,7 @@ public class MyStoreFragment extends FragmentView implements MyStoreView {
     int selected = adapter.getSelectedCount();
 
     if (selected != 0) {
+      handleToolbarItems(true);
       if (selected == 1) {
         toolbar.setTitle(String.valueOf(adapter.getSelectedCount()) + " " + getContext().getString(
             R.string.app_selected));
@@ -335,7 +334,7 @@ public class MyStoreFragment extends FragmentView implements MyStoreView {
     return Observable.empty();
   }
 
-  private void handleToolbarItems(boolean shouldShow){
+  @Override public void handleToolbarItems(boolean shouldShow){
     if(shouldShow){
       toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
       logoutItem.setVisible(false);

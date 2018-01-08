@@ -55,14 +55,11 @@ public class MyAppsAdapter extends RecyclerView.Adapter<AppViewHolder> {
   }
 
   public void handleBackNavigation(){
-    selectionList.clear();
+    selectedApps.clear();
+    selectedPublisher.onNext(false);
     notifyDataSetChanged();
   }
 
-  public void setSelected(int position){
-    if(selectionList.contains(position)) {
-      selectionList.remove((Integer) position);
-      if(selectionList.size()==0)
   public void setSelected(int position) {
     if (selectedApps.contains(position)) {
       selectedApps.remove((Integer) position);

@@ -27,9 +27,9 @@ public interface MyStoreView extends View {
 
   void toggleSubmitButton(boolean status);
 
-  void resetSelectionState();
-
   Observable<Object> logoutEvent();
 
   Observable<List<InstalledApp>> getSelectedApps();
+
+  void handleToolbarItems(boolean shouldShow);
 }

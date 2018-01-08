@@ -23,8 +23,7 @@ public class LoginNavigator {
   }
 
   public void navigateToCreateStoreView() {
-    Toast.makeText(context, "create store view not implemented", Toast.LENGTH_SHORT)
-        .show();
+    new CreateStoreDialogFragment().show(fragmentManager, "CREATE_STORE");
   }
 
   public void navigateToCreateAccountView() {
