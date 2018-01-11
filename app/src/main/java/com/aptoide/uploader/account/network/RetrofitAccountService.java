@@ -2,6 +2,7 @@ package com.aptoide.uploader.account.network;
 
 import com.aptoide.uploader.account.AccountService;
 import com.aptoide.uploader.account.AptoideAccount;
+import com.aptoide.uploader.account.AptoideAccountManager;
 import com.aptoide.uploader.account.network.error.DuplicatedStoreException;
 import com.aptoide.uploader.account.network.error.DuplicatedUserException;
 import com.aptoide.uploader.security.SecurityAlgorithms;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import kotlin.NotImplementedError;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
@@ -42,10 +44,53 @@ public class RetrofitAccountService implements AccountService {
     this.mapper = mapper;
   }
 
-  @Override public Single<AptoideAccount> getAccount(String username, String password) {
+  @Override
+  public Single<AptoideAccount> getAccount(String type, String username, String password) {
+    switch (type) {
+      case AptoideAccountManager.TYPE_FACEBOOK:
+        return createFacebookAccount(username, password);
+      case AptoideAccountManager.TYPE_APTOIDE:
+        return getAccount(username, password);
+      default:
+        return Single.error(NotImplementedError::new);
+    }
+  }
+
+  private Single<AptoideAccount> getAccount(String username, String password) {
     final Map<String, String> args = new HashMap<>();
     args.put("username", username);
     args.put("password", password);
+    args.put("grant_type", ACCOUNT_GRANT_TYPE);
+    args.put("client_id", ACCOUNT_CLIENT_ID);
+    args.put("mode", RESPONSE_MODE);
+
+    return serviceV3.oauth2Authentication(args)
+        .singleOrError()
+        .flatMap(response -> {
+          if (response.isSuccessful() && !response.body()
+              .hasErrors()) {
+            return serviceV7.getUserInfo(new AccountRequestBody(Arrays.asList("meta"),
+                response.body()
+                    .getAccessToken()))
+                .singleOrError();
+          }
+
+          return Single.error(new IllegalStateException(response.message()));
+        })
+        .flatMap(response -> {
+          if (response.isSuccessful() && response.body()
+              .isOk()) {
+            return Single.just(mapper.map(response.body()));
+          }
+          return Single.error(new IllegalStateException(response.message()));
+        });
+  }
+
+  private Single<AptoideAccount> createFacebookAccount(String email, String oauthToken) {
+    final Map<String, String> args = new HashMap<>();
+    args.put("authMode", "facebook_uploader");
+    args.put("username", email);
+    args.put("oauthToken", oauthToken);
     args.put("grant_type", ACCOUNT_GRANT_TYPE);
     args.put("client_id", ACCOUNT_CLIENT_ID);
     args.put("mode", RESPONSE_MODE);

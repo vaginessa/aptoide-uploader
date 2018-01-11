@@ -42,8 +42,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
 
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())
@@ -85,8 +86,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
 
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())
@@ -128,8 +130,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
 
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())
@@ -165,8 +168,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
 
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())
@@ -201,8 +205,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
 
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())
@@ -238,8 +243,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
             val accounts = PublishSubject.create<AptoideAccount>()
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())
@@ -268,8 +274,9 @@ class CreateAccountPresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
             val accounts = PublishSubject.create<AptoideAccount>()
             val view = mock<CreateAccountView>()
             val presenter = CreateAccountPresenter(view, accountManager, navigator, CompositeDisposable(), Schedulers.trampoline())

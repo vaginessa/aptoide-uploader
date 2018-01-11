@@ -7,9 +7,13 @@ public interface LoginView extends View {
 
   Observable<CredentialsViewModel> getLoginEvent();
 
+  Observable<?> getFacebookLoginEvent();
+
   Observable<CredentialsViewModel> getOpenCreateAccountView();
 
   void showLoading(String username);
+
+  void showLoading();
 
   void hideLoading();
 

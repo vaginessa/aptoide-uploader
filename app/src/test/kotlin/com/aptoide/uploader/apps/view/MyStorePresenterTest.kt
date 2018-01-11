@@ -8,6 +8,7 @@ import com.aptoide.uploader.account.AptoideAccount
 import com.aptoide.uploader.account.AptoideAccountManager
 import com.aptoide.uploader.account.network.AccountResponseMapper
 import com.aptoide.uploader.account.network.RetrofitAccountService
+import com.aptoide.uploader.account.view.FacebookSignUpAdapter
 import com.aptoide.uploader.apps.*
 import com.aptoide.uploader.security.SecurityAlgorithms
 import com.aptoide.uploader.view.View
@@ -44,11 +45,12 @@ class MyStorePresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
             val uploadManager = mock<UploadManager> {}
             val languageManager = mock<LanguageManager> {}
-            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence))
+            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence, facebookSingUpAdapter))
             val storeManager = StoreManager(packageProvider, storeNameProvider, uploadManager, languageManager, accountManager)
             val installedAppsPresenter = MyStorePresenter(view, storeManager, CompositeDisposable(), navigator, Schedulers.trampoline())
             val appList = mutableListOf(facebook, aptoide)
@@ -82,11 +84,12 @@ class MyStorePresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
             val uploadManager = mock<UploadManager> {}
             val languageManager = mock<LanguageManager> {}
-            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence))
+            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence, facebookSingUpAdapter))
             val storeManager = StoreManager(packageProvider, storeNameProvider, uploadManager, languageManager, accountManager)
             val installedAppsPresenter = MyStorePresenter(view, storeManager, CompositeDisposable(), navigator, Schedulers.trampoline())
 
@@ -122,11 +125,12 @@ class MyStorePresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
             val uploadManager = mock<UploadManager> {}
             val languageManager = mock<LanguageManager> {}
-            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence))
+            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence, facebookSingUpAdapter))
             val storeManager = StoreManager(packageProvider, storeNameProvider, uploadManager, languageManager, accountManager)
             val installedAppsPresenter = MyStorePresenter(view, storeManager, CompositeDisposable(), navigator, Schedulers.trampoline())
 
@@ -168,11 +172,12 @@ class MyStorePresenterTest : Spek({
             val serviceV3 = mock<RetrofitAccountService.ServiceV3>()
             val serviceV7 = mock<RetrofitAccountService.ServiceV7>()
             val accountPersistence = mock<AccountPersistence>()
+            val facebookSingUpAdapter = mock<FacebookSignUpAdapter>()
             val accountManager = AptoideAccountManager(RetrofitAccountService(serviceV2, serviceV3,
-                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence)
+                    serviceV7, SecurityAlgorithms(), AccountResponseMapper()), accountPersistence, facebookSingUpAdapter)
             val uploadManager = mock<UploadManager> {}
             val languageManager = mock<LanguageManager> {}
-            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence))
+            val storeNameProvider = AccountStoreNameProvider(AptoideAccountManager(accountService, accountPersistence, facebookSingUpAdapter))
             val storeManager = StoreManager(packageProvider, storeNameProvider, uploadManager, languageManager, accountManager)
             val installedAppsPresenter = MyStorePresenter(view, storeManager, CompositeDisposable(), navigator, Schedulers.trampoline())
 

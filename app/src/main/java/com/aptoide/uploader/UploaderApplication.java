@@ -5,12 +5,16 @@ import com.aptoide.uploader.account.AptoideAccountManager;
 import com.aptoide.uploader.account.network.AccountResponseMapper;
 import com.aptoide.uploader.account.network.RetrofitAccountService;
 import com.aptoide.uploader.account.persistence.SharedPreferencesAccountPersistence;
+import com.aptoide.uploader.account.view.FacebookSignUpAdapter;
+import com.aptoide.uploader.account.view.LoginPreferences;
 import com.aptoide.uploader.apps.AccountStoreNameProvider;
 import com.aptoide.uploader.apps.PackageManagerInstalledAppsProvider;
 import com.aptoide.uploader.apps.StoreManager;
 import com.aptoide.uploader.security.SecurityAlgorithms;
+import com.facebook.login.LoginManager;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import java.util.Arrays;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -50,7 +54,9 @@ public class UploaderApplication extends NotificationApplicationView {
               retrofitV7.create(RetrofitAccountService.ServiceV7.class), new SecurityAlgorithms(),
               new AccountResponseMapper()),
           new SharedPreferencesAccountPersistence(PublishSubject.create(),
-              PreferenceManager.getDefaultSharedPreferences(this), Schedulers.io()));
+              PreferenceManager.getDefaultSharedPreferences(this), Schedulers.io()),
+          new FacebookSignUpAdapter(Arrays.asList("email"), LoginManager.getInstance(),
+              new LoginPreferences()));
     }
     return accountManager;
   }

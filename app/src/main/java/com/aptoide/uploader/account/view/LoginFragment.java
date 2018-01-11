@@ -9,11 +9,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.aptoide.uploader.ActivityNavigator;
 import com.aptoide.uploader.R;
 import com.aptoide.uploader.UploaderApplication;
 import com.aptoide.uploader.account.AptoideAccountManager;
 import com.aptoide.uploader.view.android.FragmentView;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxrelay2.PublishRelay;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -27,6 +32,7 @@ public class LoginFragment extends FragmentView implements LoginView {
   private TextView loadingTextView;
   private AptoideAccountManager accountManager;
   private View loginButton;
+  private View facebookLoginButton;
   private View signUpButton;
 
   public static LoginFragment newInstance() {
@@ -45,12 +51,20 @@ public class LoginFragment extends FragmentView implements LoginView {
     passwordEditText = view.findViewById(R.id.fragment_login_password_edit_text);
     usernameEditText = view.findViewById(R.id.fragment_login_username_edit_text);
     loginButton = view.findViewById(R.id.fragment_login_button);
+    facebookLoginButton = view.findViewById(R.id.fragment_login_facebook_button);
     signUpButton = view.findViewById(R.id.fragment_login_sign_up);
     progressContainer = view.findViewById(R.id.fragment_login_progress_container);
     loadingTextView = view.findViewById(R.id.fragment_login_loading_text_view);
     fragmentContainer = view.findViewById(R.id.fragment_login_content);
 
-    new LoginPresenter(this, accountManager, new LoginNavigator(getContext(), getFragmentManager()),
+    FacebookSdk.sdkInitialize(getContext().getApplicationContext());
+    LoginManager loginManager = LoginManager.getInstance();
+    CallbackManager callbackManager = CallbackManager.Factory.create();
+    PublishRelay<FacebookLoginResult> facebookLoginSubject = PublishRelay.create();
+
+    new LoginPresenter(this, accountManager,
+        new LoginNavigator(getContext(), getFragmentManager(), loginManager, callbackManager,
+            facebookLoginSubject, getActivity(), (ActivityNavigator) getActivity()),
         new CompositeDisposable(), AndroidSchedulers.mainThread()).present();
   }
 
@@ -76,6 +90,11 @@ public class LoginFragment extends FragmentView implements LoginView {
         .map(__ -> getViewModel());
   }
 
+  @Override public Observable<?> getFacebookLoginEvent() {
+    return RxView.clicks(facebookLoginButton)
+        .map(__ -> getViewModel());
+  }
+
   @Override public Observable<CredentialsViewModel> getOpenCreateAccountView() {
     return RxView.clicks(signUpButton)
         .map(__ -> getViewModel());
@@ -83,6 +102,12 @@ public class LoginFragment extends FragmentView implements LoginView {
 
   @Override public void showLoading(String username) {
     loadingTextView.setText(getString(R.string.logging_as).concat(" " + username));
+    fragmentContainer.setVisibility(View.GONE);
+    progressContainer.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void showLoading() {
+    loadingTextView.setText(getString(R.string.logging_in));
     fragmentContainer.setVisibility(View.GONE);
     progressContainer.setVisibility(View.VISIBLE);
   }

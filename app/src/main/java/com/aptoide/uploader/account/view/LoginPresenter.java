@@ -4,6 +4,7 @@ import com.aptoide.uploader.account.AptoideAccountManager;
 import com.aptoide.uploader.view.Presenter;
 import com.aptoide.uploader.view.View;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.exceptions.OnErrorNotImplementedException;
 
@@ -50,8 +51,9 @@ public class LoginPresenter implements Presenter {
         .filter(event -> event.equals(View.LifecycleEvent.CREATE))
         .flatMapCompletable(__ -> view.getLoginEvent()
             .doOnNext(credentials -> view.showLoading(credentials.getUsername()))
-            .flatMapCompletable(credentials -> accountManager.login(credentials.getUsername(),
-                credentials.getPassword()))
+            .flatMapCompletable(
+                credentials -> accountManager.login(AptoideAccountManager.TYPE_APTOIDE,
+                    credentials.getUsername(), credentials.getPassword()))
             .observeOn(viewScheduler)
             .doOnError(throwable -> {
               view.hideLoading();
@@ -79,6 +81,27 @@ public class LoginPresenter implements Presenter {
         .filter(event -> event.equals(View.LifecycleEvent.DESTROY))
         .doOnNext(__ -> compositeDisposable.clear())
         .subscribe(lifecycleEvent -> {
+        }, throwable -> {
+          throw new OnErrorNotImplementedException(throwable);
+        }));
+
+    compositeDisposable.add(view.getLifecycleEvent()
+        .filter(event -> event.equals(View.LifecycleEvent.CREATE))
+        .flatMap(__ -> view.getFacebookLoginEvent())
+        .doOnNext(event -> view.showLoading())
+        .doOnNext(event -> loginNavigator.navigateToFacebookSignUpForResult())
+        .flatMapCompletable(event -> loginNavigator.facebookSignUpResults()
+            .flatMapCompletable(result -> accountManager.login(result)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(throwable -> {
+                  view.hideLoading();
+                  if (isInternetError(throwable)) {
+                    view.showNetworkError();
+                  } else {
+                    view.showCrendentialsError();
+                  }
+                })))
+        .subscribe(() -> {
         }, throwable -> {
           throw new OnErrorNotImplementedException(throwable);
         }));
